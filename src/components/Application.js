@@ -67,8 +67,9 @@ export default function Application(props) {
       [id]: appointment
     }
     // cb();
-    setState(prev => ({...prev, appointments: appointments}))
-    return axios.delete(`api/appointments/${id}`);
+    return axios.delete(`api/appointments/${id}`).then(() => {
+      setState(prev => ({...prev, appointments: appointments}))
+    });
   }
   
 

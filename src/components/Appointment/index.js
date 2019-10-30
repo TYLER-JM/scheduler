@@ -9,13 +9,17 @@ import Empty from "./Empty";
 import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
+import Error from "./Error";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
+const EDIT = "EDIT";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
+const ERROR_DELETE = "ERROR_DELETE";
+const ERROR_SAVE = "ERROR_SAVE";
 
 
 export default function Appointment(props) {
@@ -26,14 +30,18 @@ export default function Appointment(props) {
       interviewer
     };
     transition(SAVING);
-    props.bookInterview(props.id, interview).then(() => {transition(SHOW)});
+    props.bookInterview(props.id, interview)
+      .then(() => {transition(SHOW)})
+      .catch(() => transition(ERROR_SAVE, true));
   }
 
-  function deleteInterview(name, interviewer) {
+  function deleteInterview() {
     const interview = null;
     //WHY NOT WORK
-    transition(DELETING);
-    props.cancelInterview(props.id, interview).then(() => transition(EMPTY));
+    transition(DELETING, true);
+    props.cancelInterview(props.id, interview)
+      .then(() => transition(EMPTY))
+      .catch(() => transition(ERROR_DELETE, true));
   }
 
   const { mode, transition, back } = useVisualMode(
@@ -49,6 +57,16 @@ export default function Appointment(props) {
           student={props.interview.student}
           interviewer={props.interview.interviewer}
           onDelete={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
+        />
+      )}
+      {mode === EDIT && (
+        <Form
+          interviewers={props.interviewers}
+          interviewer={props.interview.interviewer.id} //???????
+          name={props.interview.student}
+          onSave={save} // NEEDS TO BE ANOTHER FUNCTION THAT MAKES A PUT?
+          onCancel={() => back()}
         />
       )}
       {mode === CREATE && (
@@ -73,6 +91,18 @@ export default function Appointment(props) {
           onCancel={() => back()}
           onConfirm={deleteInterview}
           message="Are you sure you want to delete"
+        />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error
+          onClose={() => back()}
+          message="Could not delete"
+        />
+      )}
+      {mode === ERROR_SAVE && (
+        <Error
+          onClose={() => back()}
+          message="Could not save"
         />
       )}
       {/* {props.interview ? <Show student={props.interview.student} interviewer={props.interview.interviewer} /> : <Empty />} */}
