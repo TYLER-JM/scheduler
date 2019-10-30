@@ -36,10 +36,8 @@ export default function Appointment(props) {
   }
 
   function deleteInterview() {
-    const interview = null;
-    //WHY NOT WORK
     transition(DELETING, true);
-    props.cancelInterview(props.id, interview)
+    props.cancelInterview(props.id)
       .then(() => transition(EMPTY))
       .catch(() => transition(ERROR_DELETE, true));
   }
@@ -63,15 +61,15 @@ export default function Appointment(props) {
       {mode === EDIT && (
         <Form
           interviewers={props.interviewers}
-          interviewer={props.interview.interviewer.id} //???????
+          interviewer={props.interview.interviewer.id}
           name={props.interview.student}
-          onSave={save} // NEEDS TO BE ANOTHER FUNCTION THAT MAKES A PUT?
+          onSave={save}
           onCancel={() => back()}
         />
       )}
       {mode === CREATE && (
         <Form
-          interviewers={props.interviewers} //props.interviewers
+          interviewers={props.interviewers}
           onSave={save}
           onCancel={() => back()}
         />
@@ -105,7 +103,6 @@ export default function Appointment(props) {
           message="Could not save"
         />
       )}
-      {/* {props.interview ? <Show student={props.interview.student} interviewer={props.interview.interviewer} /> : <Empty />} */}
     </article>
   );
 }
