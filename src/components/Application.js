@@ -19,7 +19,6 @@ export default function Application(props) {
 
   let appointments = getAppointmentsForDay(state, state.day);
   let interviewers = getInterviewersForDay(state, state.day);
-
   return (
     <main className="layout">
       <section className="sidebar">
