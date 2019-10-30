@@ -77,9 +77,7 @@ export function getInterviewersForDay(state, day) {
 
   if (selectedDay) {
     for (let int in state.interviewers) {
-      // console.log("selectedDay.interviewers-->", selectedDay.interviewers);
       if (selectedDay.interviewers.includes(state.interviewers[int].id)) {
-        // console.log("found");
         daysInts.push(state.interviewers[int]);
       }
     }
@@ -91,6 +89,7 @@ export function getInterviewersForDay(state, day) {
 ///////////
 
 export function getInterview(state, interview) {
+  console.log("STATEINTERVIEWERS: ", state.interviewers);
   if (!interview) {
     return null;
   }
@@ -107,8 +106,3 @@ export function getInterview(state, interview) {
 // console.log(getAppointmentsForDay(state, "Tuesday"));
 // console.log(getInterview(state, state.appointments["3"].interview));
 // console.log(getInterviewersForDay(state, "Tuesday"));
-
-
-// "avatar": "https://i.imgur.com/twYrpay.jpg",
-//     -   "id": 5,
-//     -   "name": "Sven Jones",
