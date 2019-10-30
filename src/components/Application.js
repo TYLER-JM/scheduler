@@ -5,7 +5,7 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "./Appointment";
 // import { isUserWhitespacable } from "@babel/types";
-import { getAppointmentsForDay, getInterview } from "../helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
 
 export default function Application(props) {
@@ -37,6 +37,25 @@ export default function Application(props) {
   }, [])
 
   let appointments = getAppointmentsForDay(state, state.day);
+  let interviewers = getInterviewersForDay(state, state.day);
+
+   function bookInterview(id, interview) {
+    // console.log(id, interview);
+
+    const appointment = {
+      ...state.appointments[id],
+      interview: {...interview}
+    };
+
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    setState(prev => ({...prev, appointments: appointments}))
+
+    return axios.put(`api/appointments/${id}`, appointment);
+  }
+  
 
   return (
     <main className="layout">
@@ -72,6 +91,8 @@ export default function Application(props) {
           id={appointment.id}
           time={appointment.time}
           interview={interview}
+          interviewers={interviewers}
+          bookInterview={bookInterview}
         />
         );
       })}     
