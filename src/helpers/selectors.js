@@ -14,18 +14,22 @@ export function getAppointmentsForDay(state, day) {
 
 };
 
+///////////////
+/////NEW///////
 
 // const state = {
 //   days: [
 //     {
 //       id: 1,
 //       name: "Monday",
-//       appointments: [1, 2, 3]
+//       appointments: [1, 2, 3],
+//       interviewers: [1, 2]
 //     },
 //     {
 //       id: 2,
 //       name: "Tuesday",
-//       appointments: [4, 5]
+//       appointments: [4, 5],
+//       interviewers: [4, 5]
 //     }
 //   ],
 //   appointments: {
@@ -53,9 +57,38 @@ export function getAppointmentsForDay(state, day) {
 //       id: 2,
 //       name: "Tori Malcolm",
 //       avatar: "https://i.imgur.com/Nmx0Qxo.png"
+//     },
+//     "3": {
+//       id: 5,
+//       name: "Sven Jones",
+//       avatar: "https://i.imgur.com/twYrpay.jpg"
+//     },
+//     "4": {
+//       id: 4,
+//       name: "Cohana Roy",
+//       avatar: "https://i.imgur.com/FK8V841.jpg"
 //     }
 //   }
 // };
+
+export function getInterviewersForDay(state, day) {
+  let selectedDay = state.days.filter(d => d.name === day)[0];
+  let daysInts = [];
+
+  if (selectedDay) {
+    for (let int in state.interviewers) {
+      // console.log("selectedDay.interviewers-->", selectedDay.interviewers);
+      if (selectedDay.interviewers.includes(state.interviewers[int].id)) {
+        // console.log("found");
+        daysInts.push(state.interviewers[int]);
+      }
+    }
+  }
+  return daysInts;
+};
+
+////END////
+///////////
 
 export function getInterview(state, interview) {
   if (!interview) {
@@ -71,5 +104,11 @@ export function getInterview(state, interview) {
   }
 };
 
-// console.log(getAppointmentsForDay(state, "Monday"));
+// console.log(getAppointmentsForDay(state, "Tuesday"));
 // console.log(getInterview(state, state.appointments["3"].interview));
+// console.log(getInterviewersForDay(state, "Tuesday"));
+
+
+// "avatar": "https://i.imgur.com/twYrpay.jpg",
+//     -   "id": 5,
+//     -   "name": "Sven Jones",
