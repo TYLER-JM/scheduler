@@ -12,9 +12,9 @@ export default function useApplicationData() {
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
 
+  const SET_DAYS = "SET_DAYS"
+
   function reducer(state, action) {
-    console.log("state in reducer", state);
-    console.log("action.value.interviewers::", action.value.interviewers);
     switch (action.type) {
       case SET_DAY:
         return { ...state, day: action.value}
@@ -23,6 +23,8 @@ export default function useApplicationData() {
       case SET_INTERVIEW: {
         return { ...state, appointments: action.value }
       }
+      case SET_DAYS:
+        return { ...state, days: action.value}
       default:
         throw new Error(
           `Tried to reduce with unsupported action type: ${action.type}`
@@ -51,6 +53,11 @@ export default function useApplicationData() {
       console.log(first.data, second.data, third.data);
     });
   }, [])
+
+  useEffect(() => {
+    axios.get("api/days")
+      .then((res) => dispatch({type: SET_DAYS, value: res.data}))
+  }, [state.days])
 
 
   const bookInterview = function(id, interview) {
