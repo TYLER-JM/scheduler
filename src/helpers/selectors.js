@@ -89,7 +89,6 @@ export function getInterviewersForDay(state, day) {
 ///////////
 
 export function getInterview(state, interview) {
-  console.log("STATEINTERVIEWERS: ", state.interviewers);
   if (!interview) {
     return null;
   }
