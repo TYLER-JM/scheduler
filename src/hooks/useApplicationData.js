@@ -1,4 +1,4 @@
-import {useEffect, useReducer} from "react";
+import {useEffect, useReducer, useRef} from "react";
 import axios from "axios";
 
 
@@ -11,8 +11,14 @@ export default function useApplicationData() {
   const SET_DAY = "SET_DAY";
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
+  const SET_DAYS = "SET_DAYS";
 
-  const SET_DAYS = "SET_DAYS"
+  ///////
+  //NEW//
+  const UPDATE_INTERVIEW = "UPDATE_INTERVIEW";
+
+  const socket = useRef();
+  
 
   function reducer(state, action) {
     switch (action.type) {
@@ -21,8 +27,21 @@ export default function useApplicationData() {
       case SET_APPLICATION_DATA:
         return { ...state, days: action.value.days, appointments: action.value.appointments, interviewers: action.value.interviewers }
       case SET_INTERVIEW: {
+
+        //move logic to here
         return { ...state, appointments: action.value }
       }
+      case UPDATE_INTERVIEW:
+        const appointment = {
+          ...state.appointments[action.value.id],
+          interview: action.value.interview && {...action.value.interview}
+        };
+        const appointments = {
+          ...state.appointments,
+          [action.value.id]: appointment
+        };
+        return {...state, appointments: appointments}
+        //stuff here
       case SET_DAYS:
         return { ...state, days: action.value}
       default:
@@ -50,14 +69,56 @@ export default function useApplicationData() {
       
       const [first, second, third] = all;
       dispatch({type: SET_APPLICATION_DATA, value: {days: first.data, appointments: second.data, interviewers: third.data}})
-      console.log(first.data, second.data, third.data);
+      // console.log(first.data, second.data, third.data);
     });
   }, [])
 
   useEffect(() => {
     axios.get("api/days")
       .then((res) => dispatch({type: SET_DAYS, value: res.data}))
-  }, [state.days])
+  }, [state.appointments])
+
+  
+  useEffect(() => {
+    socket.current = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
+    socket.current.onopen = () => {
+      socket.current.send("ping");
+      socket.current.onmessage = function(event){
+        let parsed = JSON.parse(event.data);
+        if (parsed.type === "SET_INTERVIEW") {
+          console.log("WE GOT A PACKAGE INCOMING HERE!");
+          console.log("parsed: ", parsed);
+
+          /////////
+          //ADDED//
+
+          // const appointment = {
+          //   ...state.appointments[parsed.id],
+          //   interview: {...parsed.interview}
+          // };
+          // const appointments = {
+          //   ...state.appointments,
+          //   [parsed.id]: appointment
+          // };
+          // console.log("APPOINTMENTS: ", appointments)
+
+          //to UPDATE_INTERVIEW with value: parsed
+          dispatch({type: UPDATE_INTERVIEW, value: parsed});
+          // dispatch({type: SET_INTERVIEW, value: appointments});
+
+          //ADDED//
+          /////////
+
+        }
+        // console.log("Message: ", event.data);
+      }
+    }
+
+    return () => {
+      socket.current.close()
+    }
+  },[])
 
 
   const bookInterview = function(id, interview) {
