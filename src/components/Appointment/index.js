@@ -20,12 +20,17 @@ const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const ERROR_DELETE = "ERROR_DELETE";
 const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_NO_INT = "ERROR_NO_INT";
 
 
 
 export default function Appointment(props) {
 
   function save(name, interviewer) {
+    if (!interviewer) {
+      transition(ERROR_NO_INT)
+      return;
+    }
     const interview = {
       student: name,
       interviewer
@@ -111,6 +116,12 @@ export default function Appointment(props) {
         <Error
           onClose={() => back()}
           message="Could not save"
+        />
+      )}
+      {mode === ERROR_NO_INT && (
+        <Error
+          onClose={() => back()}
+          message="please include an interviewer"
         />
       )}
     </article>
