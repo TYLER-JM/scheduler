@@ -28,7 +28,6 @@ export default function useApplicationData() {
         return { ...state, days: action.value.days, appointments: action.value.appointments, interviewers: action.value.interviewers }
       case SET_INTERVIEW: {
 
-        //move logic to here
         return { ...state, appointments: action.value }
       }
       case UPDATE_INTERVIEW:
@@ -41,7 +40,6 @@ export default function useApplicationData() {
           [action.value.id]: appointment
         };
         return {...state, appointments: appointments}
-        //stuff here
       case SET_DAYS:
         return { ...state, days: action.value}
       default:
