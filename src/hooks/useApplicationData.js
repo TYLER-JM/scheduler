@@ -60,9 +60,9 @@ export default function useApplicationData() {
 
   useEffect(() => {
     Promise.all([
-      axios.get("api/days"),
-      axios.get("api/appointments"),
-      axios.get("api/interviewers")
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
     ]).then(all => {
       
       const [first, second, third] = all;
@@ -72,7 +72,7 @@ export default function useApplicationData() {
   }, [])
 
   useEffect(() => {
-    axios.get("api/days")
+    axios.get("/api/days")
       .then((res) => dispatch({type: SET_DAYS, value: res.data}))
   }, [state.appointments])
 
@@ -132,7 +132,7 @@ export default function useApplicationData() {
     };
     dispatch({type: SET_INTERVIEW, value: appointments})
     
-    return axios.put(`api/appointments/${id}`, appointment);
+    return axios.put(`/api/appointments/${id}`, appointment);
   };
   
   const cancelInterview = function(id) {
@@ -144,7 +144,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
-    return axios.delete(`api/appointments/${id}`).then(() => {
+    return axios.delete(`/api/appointments/${id}`).then(() => {
       dispatch({type: SET_INTERVIEW, value: appointments})
     });
   };
