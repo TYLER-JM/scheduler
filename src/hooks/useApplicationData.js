@@ -36,8 +36,6 @@ export default function useApplicationData() {
     axios.get("/api/days")
       .then((res) => dispatch({type: SET_DAYS, value: res.data}))
 
-    // let days = state.days;
-    // dispatch({type: SET_DAYS, value: 1})
   }, [state.appointments])
 
   
