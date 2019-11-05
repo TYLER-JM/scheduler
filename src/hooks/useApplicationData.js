@@ -1,53 +1,14 @@
 import {useEffect, useReducer, useRef} from "react";
 import axios from "axios";
 
+import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_DAYS, UPDATE_INTERVIEW } from "../reducers/application";
+
 
 export default function useApplicationData() {
-
-  //////////////////
-  ////USEREDUCER////
-
-
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
-  const SET_DAYS = "SET_DAYS";
-
-  ///////
-  //NEW//
-  const UPDATE_INTERVIEW = "UPDATE_INTERVIEW";
 
   const socket = useRef();
   
 
-  function reducer(state, action) {
-    switch (action.type) {
-      case SET_DAY:
-        return { ...state, day: action.value}
-      case SET_APPLICATION_DATA:
-        return { ...state, days: action.value.days, appointments: action.value.appointments, interviewers: action.value.interviewers }
-      case SET_INTERVIEW: {
-
-        return { ...state, appointments: action.value }
-      }
-      case UPDATE_INTERVIEW:
-        const appointment = {
-          ...state.appointments[action.value.id],
-          interview: action.value.interview && {...action.value.interview}
-        };
-        const appointments = {
-          ...state.appointments,
-          [action.value.id]: appointment
-        };
-        return {...state, appointments: appointments}
-      case SET_DAYS:
-        return { ...state, days: action.value}
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
-    }
-  }
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -74,6 +35,9 @@ export default function useApplicationData() {
   useEffect(() => {
     axios.get("/api/days")
       .then((res) => dispatch({type: SET_DAYS, value: res.data}))
+
+    // let days = state.days;
+    // dispatch({type: SET_DAYS, value: 1})
   }, [state.appointments])
 
   
@@ -130,6 +94,7 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+
     dispatch({type: SET_INTERVIEW, value: appointments})
     
     return axios.put(`/api/appointments/${id}`, appointment);
