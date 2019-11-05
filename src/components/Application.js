@@ -19,6 +19,7 @@ export default function Application(props) {
 
   let appointments = getAppointmentsForDay(state, state.day);
   let interviewers = getInterviewersForDay(state, state.day);
+
   return (
     <main className="layout">
       <section className="sidebar">
@@ -49,7 +50,6 @@ export default function Application(props) {
         return (
         <Appointment
           key={appointment.id}
-          // {...appointment}
           id={appointment.id}
           time={appointment.time}
           interview={interview}

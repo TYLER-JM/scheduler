@@ -15,7 +15,6 @@ export default function useVisualMode(initial) {
       modeOut.history = [prev.current, ...prev.history];
     }
       return modeOut;
-      // return {current: newMode, history: [prev.current, ...prev.history]};
     });
   };
   const back = () => setMode(prev => ({current: prev.history[0], history: prev.history.slice(1)}));
