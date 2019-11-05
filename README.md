@@ -1,6 +1,6 @@
 # Interview Scheduler
 
-An introductory project using React, Storybook, and webpack. As well as Jest, and Cypress for testing. The project also uses WebSockets to allow for multiple users to see the changes made by another user immediately.
+An introductory project using React, Storybook, and Webpack Dev Server. As well as Jest, and Cypress for testing. Axios for making calls to the database server. The project also uses WebSockets to allow for multiple users to see the changes made by another user immediately.
 
 Users can navigate to a day of the week and add, edit or delete appointments in one of five available time slots
 
