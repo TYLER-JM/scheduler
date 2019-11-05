@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import "./styles.scss";
-import useVisualMode from "../../hooks/useVisualMode"
+import useVisualMode from "../../hooks/useVisualMode";
 
 
 import Header from "./Header";

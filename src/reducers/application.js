@@ -24,13 +24,10 @@ export default function reducer(state, action) {
         [action.value.id]: appointment
       };
 
-
-      /////////
-      //ADDIN//
       const tempState = {...state, appointments: appointments};
 
+      //update the spots remaining for the day where an appointment was added or removed
       let appointId = action.value.id;
-      //find the day of the week the appointment is on
       const dayToModify = tempState.days.filter((day) => {
         return day.appointments.includes(appointId);
       })[0];
@@ -40,9 +37,6 @@ export default function reducer(state, action) {
       modifiedDays[dayToModify.id - 1] = modifiedDay;
 
       return {...tempState, days: modifiedDays};
-      //ADDING//
-      //////////
-      // return {...state, appointments: appointments}
 
     case SET_DAYS:
       return { ...state, days: action.value}

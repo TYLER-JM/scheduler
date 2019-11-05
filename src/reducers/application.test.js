@@ -1,4 +1,4 @@
-import reducer, { SET_DAY, SET_APPLICATION_DATA, SET_INTERVIEW, SET_DAYS, UPDATE_INTERVIEW } from "../reducers/application";
+import reducer from "../reducers/application";
 
 
 describe("Application Reducer", () => {
