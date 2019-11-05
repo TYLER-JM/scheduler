@@ -23,9 +23,9 @@ describe("Application", () => {
   });
   
   it("loads data, books an interview and reduces the spots remaining for the first day by 1", async () => {
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
+    // console.log("container", prettyDOM(container));
 
-    // try {
       await waitForElement(() => getByText(container, "Archie Cohen"));
       const appointment = getAllByTestId(container, "appointment")[0]; 
       // console.log(prettyDOM(appointment));
@@ -36,28 +36,23 @@ describe("Application", () => {
         target: {value: "Lydia Miller-Jones"}
       });
       fireEvent.click(getByAltText(appointment, "Sylvia Palmer"));
+      // console.log("before:", prettyDOM(appointment));
+
       fireEvent.click(getByText(appointment, "Save"));
       expect(getByText(appointment, "Saving")).toBeInTheDocument();
+
       await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
 
-      ///////////
-      //TROUBLE//
-      // const day = getAllByTestId(container, "day").find(day => 
-      //     queryByText(day, "Monday")
-      //   );
-      //   console.log(prettyDOM(day))
-      // expect(day.lastChild.innerHTML).toBe("no spots remaining");
+      const day = getAllByTestId(container, "day").find(day => 
+          queryByText(day, "Monday")
+        );
+        
+      expect(getByText(day, "no spots remaining")).toBeInTheDocument();
 
-      // console.log(prettyDOM(container));
-
-    // } 
-    // catch {
-    //   console.log("whhaaa");
-    // }
   });
 
   it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -78,12 +73,10 @@ describe("Application", () => {
     await waitForElement(() => getByAltText(appointment, "Add"));
     //5. check that the DayListItem with the text "" also has the text 2 spots remaining
 
-    ///////////
-    //TROUBLE//
-    // const day = getAllByTestId(container, "day").find(day => 
-    //   queryByText(day, "Monday")
-    // );
-    // expect(day.lastChild.innerHTML).toBe("2 spots remaining");
+    const day = getAllByTestId(container, "day").find(day => 
+      queryByText(day, "Monday")
+    );
+    expect(day.lastChild.innerHTML).toBe("2 spots remaining");
 
   });
 

@@ -32,11 +32,11 @@ export default function useApplicationData() {
     });
   }, [])
 
-  useEffect(() => {
-    axios.get("/api/days")
-      .then((res) => dispatch({type: SET_DAYS, value: res.data}))
+  // useEffect(() => {
+  //   axios.get("/api/days")
+  //     .then((res) => dispatch({type: SET_DAYS, value: res.data}))
 
-  }, [state.appointments])
+  // }, [state.appointments])
 
   
   useEffect(() => {
@@ -94,6 +94,10 @@ export default function useApplicationData() {
     };
 
     dispatch({type: SET_INTERVIEW, value: appointments})
+
+    ///TRY...
+    dispatch({type: UPDATE_INTERVIEW, value: appointment});
+    ///...tried
     
     return axios.put(`/api/appointments/${id}`, appointment);
   };
@@ -107,6 +111,10 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
+    ///TRY...
+    dispatch({type: UPDATE_INTERVIEW, value: appointment});
+    ///...tried
+
     return axios.delete(`/api/appointments/${id}`).then(() => {
       dispatch({type: SET_INTERVIEW, value: appointments})
     });

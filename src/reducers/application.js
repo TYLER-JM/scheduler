@@ -12,7 +12,6 @@ export default function reducer(state, action) {
     case SET_APPLICATION_DATA:
       return { ...state, days: action.value.days, appointments: action.value.appointments, interviewers: action.value.interviewers }
     case SET_INTERVIEW: {
-
       return { ...state, appointments: action.value }
     }
     case UPDATE_INTERVIEW:
@@ -24,7 +23,27 @@ export default function reducer(state, action) {
         ...state.appointments,
         [action.value.id]: appointment
       };
-      return {...state, appointments: appointments}
+
+
+      /////////
+      //ADDIN//
+      const tempState = {...state, appointments: appointments};
+
+      let appointId = action.value.id;
+      //find the day of the week the appointment is on
+      const dayToModify = tempState.days.filter((day) => {
+        return day.appointments.includes(appointId);
+      })[0];
+      const numSpots = dayToModify.appointments.reduce((acc, curr) => tempState.appointments[curr].interview ? acc : acc +=1, 0);
+      const modifiedDay = {...dayToModify, spots: numSpots};
+      let modifiedDays = [...tempState.days];
+      modifiedDays[dayToModify.id - 1] = modifiedDay;
+
+      return {...tempState, days: modifiedDays};
+      //ADDING//
+      //////////
+      // return {...state, appointments: appointments}
+
     case SET_DAYS:
       return { ...state, days: action.value}
     default:
